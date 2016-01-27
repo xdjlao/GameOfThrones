@@ -47,6 +47,7 @@
             newCharacter.hairColor = [self.hair objectAtIndex:arc4random_uniform(self.hair.count)];
             newCharacter.house = [self.house objectAtIndex:arc4random_uniform(self.house.count)];
             newCharacter.age = [NSNumber numberWithInt:arc4random_uniform(100)];
+            newCharacter.url = @"https://en.wikipedia.org/wiki/Game_of_Thrones";
             
             NSError *error;
             

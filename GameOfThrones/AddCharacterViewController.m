@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *genderSegmentedControl;
 @property (weak, nonatomic) IBOutlet UIPickerView *housePickerView;
 @property (weak, nonatomic) IBOutlet UIPickerView *hairPickerView;
+@property (weak, nonatomic) IBOutlet UITextField *linkTextField;
 
 @end
 
@@ -48,6 +49,7 @@
     NSInteger houseRow = [self.housePickerView selectedRowInComponent:0];
     newCharacter.house = [self.rootViewController.house objectAtIndex:houseRow];
     newCharacter.gender = [self.genderSegmentedControl titleForSegmentAtIndex:[self.genderSegmentedControl selectedSegmentIndex]];
+    newCharacter.url = self.linkTextField.text;
     
     NSError *error;
     
