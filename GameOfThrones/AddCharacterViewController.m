@@ -30,11 +30,13 @@
 }
 
 - (IBAction)onDoneButtonClicked:(UIButton *)sender {
-    [self addCharacter];
-    sender.enabled = NO;
-    
-    UINavigationController *navigationController = self.navigationController;
-    [navigationController popViewControllerAnimated:YES];
+    if (![self.linkTextField.text isEqual:@""] && ![self.nameTextField.text isEqual:@""] && ![self.ageTextField.text isEqual:@""] && ![self.actorTextField.text isEqual:@""]) {
+        [self addCharacter];
+        sender.enabled = NO;
+        
+        UINavigationController *navigationController = self.navigationController;
+        [navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)addCharacter {
