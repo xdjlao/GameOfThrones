@@ -9,14 +9,14 @@
 #import "AddCharacterViewController.h"
 #import "Character.h"
 
-@interface AddCharacterViewController ()
+@interface AddCharacterViewController () <UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *ageTextField;
-@property (weak, nonatomic) IBOutlet UITextField *houseTextField;
 @property (weak, nonatomic) IBOutlet UITextField *actorTextField;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *genderSegmentedControl;
-@property (weak, nonatomic) IBOutlet UITextField *hairColorTextField;
+@property (weak, nonatomic) IBOutlet UIPickerView *housePickerView;
+@property (weak, nonatomic) IBOutlet UIPickerView *hairPickerView;
 
 @end
 
@@ -25,10 +25,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.navigationItem.title = @"Add Character";
 }
 
 - (IBAction)onDoneButtonClicked:(UIButton *)sender {
     [self addCharacter];
+    sender.enabled = NO;
+    
+    UINavigationController *navigationController = self.navigationController;
+    [navigationController popViewControllerAnimated:YES];
 }
 
 - (void)addCharacter {
@@ -36,9 +41,12 @@
                                                             inManagedObjectContext:self.rootViewController.moc];
     newCharacter.name = self.nameTextField.text;
     newCharacter.actor = self.actorTextField.text;
-    newCharacter.hairColor = self.hairColorTextField.text;
+    NSInteger hairRow = [self.hairPickerView selectedRowInComponent:0];
+    newCharacter.hairColor = [self.rootViewController.hair objectAtIndex:hairRow];
     newCharacter.age = [NSNumber numberWithInt:[self.ageTextField.text intValue]];
-    newCharacter.house = self.houseTextField.text;
+
+    NSInteger houseRow = [self.housePickerView selectedRowInComponent:0];
+    newCharacter.house = [self.rootViewController.house objectAtIndex:houseRow];
     newCharacter.gender = [self.genderSegmentedControl titleForSegmentAtIndex:[self.genderSegmentedControl selectedSegmentIndex]];
     
     NSError *error;
@@ -49,6 +57,36 @@
         [self.rootViewController.charactersArray addObject:newCharacter];
     }
 }
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    if (pickerView.tag == 1) {
+        return self.rootViewController.hair.count;
+    } else {
+        return self.rootViewController.house.count;
+    }
+}
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view {
+    UILabel *textView = (UILabel *)view;
+    if (!textView) {
+        textView = [UILabel new];
+        [textView setFont:[UIFont fontWithName:@"HelveticaNeue" size:13]];
+    }
+    if (pickerView.tag == 1) {
+        textView.text = [self.rootViewController.hair objectAtIndex:row];
+    } else {
+        textView.text = [self.rootViewController.house objectAtIndex:row];
+    }
+    textView.textAlignment = NSTextAlignmentCenter;
+    
+    return textView;
+}
+
+
 
 /*
  #pragma mark - Navigation

@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Character.h"
+#import "RootTableViewController.h"
 
 @interface DetailViewController : UIViewController
+
+@property Character *character;
 
 @end

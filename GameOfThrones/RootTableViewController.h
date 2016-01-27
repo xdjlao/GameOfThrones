@@ -12,5 +12,7 @@
 
 @property NSMutableArray *charactersArray;
 @property NSManagedObjectContext *moc;
+@property NSArray *house;
+@property NSArray *hair;
 
 @end

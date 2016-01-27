@@ -11,6 +11,7 @@
 #import "Character.h"
 #import "AppDelegate.h"
 #import "AddCharacterViewController.h"
+#import "DetailViewController.h"
 
 @interface RootTableViewController ()
 
@@ -24,6 +25,8 @@
     [super viewDidLoad];
     
     self.characterWithImages = @[@"petyrbaelish", @"aryastark", @"tyrionlannister"];
+    self.house = @[@"House Baratheon", @"House Lannister", @"House Stark", @"House Targaryen", @"House Martell", @"House Bolton"];
+    self.hair = @[@"Black", @"Brown", @"Blonde", @"Red", @"White"];
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     self.moc = appDelegate.managedObjectContext;
@@ -31,8 +34,6 @@
     
     if ([self loadCharacters]) {
         NSArray *gender = @[@"Male", @"Female"];
-        NSArray *hairColor = @[@"Black", @"Brown", @"Blonde", @"Red", @"White"];
-        NSArray *house = @[@"House Baratheon", @"House Lannister", @"House Stark", @"House Targaryen", @"House Martell", @"House Bolton"];
         
         NSString *contents = [[NSBundle mainBundle] pathForResource:@"gameofthrones" ofType:@"plist"];
         NSMutableArray *setCharacters = [NSMutableArray arrayWithContentsOfFile: contents];
@@ -43,8 +44,8 @@
             newCharacter.name = character[@"character"];
             newCharacter.actor = character[@"actor"];
             newCharacter.gender = [gender objectAtIndex:arc4random_uniform(gender.count)];
-            newCharacter.hairColor = [hairColor objectAtIndex:arc4random_uniform(hairColor.count)];
-            newCharacter.house = [house objectAtIndex:arc4random_uniform(house.count)];
+            newCharacter.hairColor = [self.hair objectAtIndex:arc4random_uniform(self.hair.count)];
+            newCharacter.house = [self.house objectAtIndex:arc4random_uniform(self.house.count)];
             newCharacter.age = [NSNumber numberWithInt:arc4random_uniform(100)];
             
             NSError *error;
@@ -57,13 +58,12 @@
             }
             
         }
-        [self.tableView reloadData];
-    } else {
-        [self.tableView reloadData];
+        [self loadCharacters];
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [self loadCharacters];
     [self.tableView reloadData];
 }
 
@@ -103,6 +103,7 @@
 }
 
 - (BOOL)loadCharacters {
+    [self.charactersArray removeAllObjects];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Character"];
     
     NSSortDescriptor *sortName = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
@@ -121,6 +122,7 @@
             NSLog(@"%@", error.localizedDescription);
         } else {
             [self.charactersArray addObjectsFromArray:responseArray];
+            [self.tableView reloadData];
         }
         return NO;
     } else {
@@ -182,8 +184,15 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    AddCharacterViewController *destination = segue.destinationViewController;
-    destination.rootViewController = self;
+    if ([segue.identifier  isEqual: @"Add"]) {
+        AddCharacterViewController *destination = segue.destinationViewController;
+        destination.rootViewController = self;
+    } else if ([segue.identifier isEqual: @"Detail"]) {
+        DetailViewController *destination = segue.destinationViewController;
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        destination.character = [self.charactersArray objectAtIndex:indexPath.row];
+    }
+    
 }
 
 @end
