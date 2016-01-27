@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>actor</key>
+		<string>Peter Dinklage</string>
+		<key>character</key>
+		<string>Tyrion Lannister</string>
+	</dict>
+	<dict>
+		<key>actor</key>
+		<string>Maisie Williams</string>
+		<key>character</key>
+		<string>Arya Stark</string>
+	</dict>
+	<dict>
+		<key>actor</key>
+		<string>Aidan Gillen</string>
+		<key>character</key>
+		<string>Petyr Baelish</string>
+	</dict>
+</array>
+</plist>
